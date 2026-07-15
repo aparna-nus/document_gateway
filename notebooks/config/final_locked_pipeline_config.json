@@ -1,0 +1,153 @@
+{
+  "version": "final_locked_v1",
+  "split_source": "saved Notebook 3 split artifact",
+  "random_seed": 42,
+  "tuning_fraction": 0.4,
+  "feature_path": "../eval/dataset/cv_features_v3.csv",
+  "scaler": {
+    "white_pixel_ratio": {
+      "lower": 0.0,
+      "upper": 0.9266649075735262,
+      "log1p": false
+    },
+    "dark_pixel_ratio": {
+      "lower": 0.0,
+      "upper": 0.1915789339887332,
+      "log1p": false
+    },
+    "mean_saturation": {
+      "lower": 0.0,
+      "upper": 0.44983718549828966,
+      "log1p": false
+    },
+    "otsu_separation": {
+      "lower": 0.5458314697043072,
+      "upper": 0.9193918876034357,
+      "log1p": false
+    },
+    "crop_cc_touch_ratio": {
+      "lower": 0.0,
+      "upper": 0.1554599233716475,
+      "log1p": false
+    },
+    "crop_cc_touch_area_ratio": {
+      "lower": 0.0,
+      "upper": 0.5144860110426894,
+      "log1p": false
+    },
+    "crop_boundary_ink_max": {
+      "lower": 0.0,
+      "upper": 0.3637866666666668,
+      "log1p": false
+    },
+    "crop_projection_delta_max": {
+      "lower": 0.0,
+      "upper": 0.31520400788635017,
+      "log1p": false
+    },
+    "local_laplacian_p25": {
+      "lower": 0.7854164323647195,
+      "upper": 8.573102167037929,
+      "log1p": true
+    },
+    "tenengrad_mean": {
+      "lower": 5.534715476682941,
+      "upper": 11.3839292951868,
+      "log1p": true
+    },
+    "quality_fft_local_p25": {
+      "lower": 0.004348628447030792,
+      "upper": 0.5292002409495091,
+      "log1p": false
+    },
+    "intensity_dynamic_range": {
+      "lower": 33.28,
+      "upper": 254.0,
+      "log1p": false
+    },
+    "underexposed_ratio": {
+      "lower": 0.0,
+      "upper": 0.14224426358689513,
+      "log1p": false
+    },
+    "overexposed_ratio": {
+      "lower": 0.0,
+      "upper": 0.9048667990983377,
+      "log1p": false
+    },
+    "near_binary_ratio": {
+      "lower": 0.0,
+      "upper": 0.9333282929194956,
+      "log1p": false
+    }
+  },
+  "thresholds": {
+    "class4_document_max": 0.199772,
+    "class2_crop_min": 1.01,
+    "class3_quality_risk_min": 0.600999,
+    "class1_document_min": 0.727049,
+    "class1_crop_max": 0.291236,
+    "class1_quality_risk_max": 0.569187
+  },
+  "routing_order": [
+    "class4",
+    "class2",
+    "class3",
+    "class1",
+    "vlm_fallback",
+    "indeterminate_on_vlm_failure"
+  ],
+  "model": {
+    "provider": "ollama",
+    "model_id": "qwen2.5vl:3b",
+    "prompt_version": "crop_sensitive_v5",
+    "temperature": 0.0,
+    "max_tokens": 300,
+    "prompt_template": "\nYou are the fallback classifier in a document pre-validation pipeline.\nClassify the image into exactly one category:\n\n<guidelines>\n1. Clear and Readable\n   A text-bearing document is the primary subject, all meaningful content\n   is visible, and the text is sufficiently readable.\n\n2. Content of the document got cut\n   A text-bearing document is present, but part of the document layout is\n   visibly clipped, cut off, missing beyond the image frame, or materially\n   occluded.\n\n   Inspect the TOP, BOTTOM, LEFT, and RIGHT image boundaries separately.\n\n   Strong evidence for Class 2 includes any of the following:\n   - text, a table, a form field, a signature area, a photograph, a header,\n     a footer, or a printed border continues beyond the image boundary;\n   - a line of text or table row is visibly truncated;\n   - part of an ID card, receipt, page, or form is outside the frame;\n   - the document layout clearly appears incomplete on one or more sides.\n\n   Do not choose Class 1 merely because the remaining visible text is readable.\n   Tight framing alone is not enough for Class 2 when the complete layout is still visible.\n\n3. Unclear / Unreadable\n   The document is substantially complete, but blur, motion shake,\n   darkness, low contrast, glare, compression, noise, or artefacts\n   make it unreadable. Slight blur without loss of readability redirects to class 1.\n\n4. Random image\n   The image is not primarily a text-bearing document. This includes\n   landscapes, people, animals, rooms, objects, fields, machinery,\n   blank notebooks, and documents appearing only as incidental scene objects.\n</guidelines>\n\n<task>\nDecision order:\nA. If a text-bearing document is not the primary subject, choose Class 4.\nB. Otherwise inspect all four image boundaries. If any document content or\n   layout is visibly clipped, truncated, missing beyond the frame, or\n   materially occluded, choose Class 2.\nC. Otherwise, if the document is materially difficult to read, choose Class 3.\nD. Otherwise, choose Class 1.\n\nIf both cropping and degradation are present, choose Class 2.\n</task>\n\nUse confidence conservatively. Set indeterminate=true when the image cannot\nbe assigned safely. Never classify a non-document image as a valid document.\n\nReturn only the requested JSON object.\n",
+    "output_schema": {
+      "type": "object",
+      "properties": {
+        "class_prediction": {
+          "type": "integer",
+          "enum": [
+            1,
+            2,
+            3,
+            4
+          ]
+        },
+        "confidence_score": {
+          "type": "number",
+          "minimum": 0.0,
+          "maximum": 1.0
+        },
+        "document_present": {
+          "type": "boolean"
+        },
+        "meaningful_content_cropped": {
+          "type": "boolean"
+        },
+        "materially_unreadable": {
+          "type": "boolean"
+        },
+        "indeterminate": {
+          "type": "boolean"
+        },
+        "justification": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "class_prediction",
+        "confidence_score",
+        "document_present",
+        "meaningful_content_cropped",
+        "materially_unreadable",
+        "indeterminate",
+        "justification"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "created_at_utc": "2026-07-14T21:31:53.757585+00:00"
+}

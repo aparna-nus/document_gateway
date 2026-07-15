@@ -1,0 +1,61 @@
+{
+  "created_at_utc": "2026-07-14T05:56:02.614276+00:00",
+  "provider": "local_ollama",
+  "model_id": "qwen2.5vl:3b",
+  "prompt_version": "fixed_structured_v1",
+  "temperature": 0.0,
+  "max_tokens": 300,
+  "evaluation_split": "evaluation",
+  "evaluation_fallback_count": 222,
+  "valid_prediction_count": 216,
+  "valid_output_rate": 0.972972972972973,
+  "class4_bypass_count": 4,
+  "indeterminate_count": 0,
+  "mean_latency_seconds": 56.95251108622728,
+  "prompt_template": "\nYou are the fallback classifier in a document pre-validation pipeline.\n\nInspect the image independently. The OpenCV scores are advisory and may be wrong:\n\n- document_score: {document_score:.4f}\n- crop_score: {crop_score:.4f}\n- quality_score: {quality_score:.4f}\n\nClassify the image into exactly one category:\n\n<guidelines>\n1. Clear and Readable\n   A text-bearing document is the primary subject, all meaningful content\n   is visible, and the text is sufficiently readable.\n\n2. Content of the document got cut\n   A text-bearing document is present, but meaningful text, a field, a\n   document edge, or another important region is missing outside the frame\n   or materially occluded. Tight framing alone is not enough.\n\n3. Unclear / Unreadable\n   The document is substantially complete, but blur, motion shake,\n   darkness, low contrast, glare, compression, noise, or artefacts\n   materially reduce readability.\n\n4. Random image\n   The image is not primarily a text-bearing document. This includes\n   landscapes, people, animals, rooms, objects, fields, machinery,\n   blank notebooks, and documents appearing only as incidental scene objects.\n</guidelines>\n\n<task>\nDecision order:\nA. If a text-bearing document is not the primary subject, choose Class 4.\nB. Otherwise, if meaningful content is missing or occluded, choose Class 2.\nC. Otherwise, if the document is materially difficult to read, choose Class 3.\nD. Otherwise, choose Class 1.\n\nIf both cropping and degradation are present, choose Class 2.\n</task>\n\nUse confidence conservatively. Set indeterminate=true when the image cannot\nbe assigned safely. Never classify a non-document image as a valid document.\n\nReturn only the requested JSON object.\n",
+  "output_schema": {
+    "type": "object",
+    "properties": {
+      "class_prediction": {
+        "type": "integer",
+        "enum": [
+          1,
+          2,
+          3,
+          4
+        ]
+      },
+      "confidence_score": {
+        "type": "number",
+        "minimum": 0.0,
+        "maximum": 1.0
+      },
+      "document_present": {
+        "type": "boolean"
+      },
+      "meaningful_content_cropped": {
+        "type": "boolean"
+      },
+      "materially_unreadable": {
+        "type": "boolean"
+      },
+      "indeterminate": {
+        "type": "boolean"
+      },
+      "justification": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "class_prediction",
+      "confidence_score",
+      "document_present",
+      "meaningful_content_cropped",
+      "materially_unreadable",
+      "indeterminate",
+      "justification"
+    ],
+    "additionalProperties": false
+  },
+  "artifact_path": "artifacts/vlm_eval_fallback_predictions.jsonl"
+}

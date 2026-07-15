@@ -1,0 +1,94 @@
+{
+  "version": "1.0",
+  "random_seed": 42,
+  "tuning_fraction": 0.4,
+  "score_definitions": {
+    "document_score": {
+      "white_pixel_ratio": 0.4,
+      "inverse_mean_saturation": 0.25,
+      "inverse_dark_pixel_ratio": 0.15,
+      "otsu_separation": 0.2
+    },
+    "crop_score": {
+      "border_edge_density": 0.45,
+      "border_dark_ratio": 0.35,
+      "edge_touch_count": 0.2
+    },
+    "quality_score": {
+      "laplacian_variance": 0.25,
+      "local_laplacian_p25": 0.2,
+      "tenengrad_mean": 0.2,
+      "grayscale_std": 0.2,
+      "mser_density": 0.15
+    }
+  },
+  "scaler": {
+    "white_pixel_ratio": {
+      "lower": 0.0,
+      "upper": 0.9340091431489218
+    },
+    "dark_pixel_ratio": {
+      "lower": 0.0,
+      "upper": 0.24372052926351873
+    },
+    "mean_saturation": {
+      "lower": 0.0,
+      "upper": 0.44983718549828966
+    },
+    "otsu_separation": {
+      "lower": 0.5479689879939285,
+      "upper": 0.9095732809139517
+    },
+    "border_edge_density": {
+      "lower": 0.0,
+      "upper": 0.1498895249867383
+    },
+    "border_dark_ratio": {
+      "lower": 0.0,
+      "upper": 0.4636477219463553
+    },
+    "laplacian_variance": {
+      "lower": 2.9396956960633576,
+      "upper": 7804.145642801246
+    },
+    "local_laplacian_p25": {
+      "lower": 1.2686181743801568,
+      "upper": 4381.862938646223
+    },
+    "tenengrad_mean": {
+      "lower": 650.1490468926786,
+      "upper": 78148.23573659266
+    },
+    "grayscale_std": {
+      "lower": 12.806264756846481,
+      "upper": 82.04173878230662
+    },
+    "mser_density": {
+      "lower": 16.2820646325801,
+      "upper": 660.87160262418
+    }
+  },
+  "thresholds": {
+    "class4_document_score_max": 0.235,
+    "class2_crop_score_min": 0.07500000000000001,
+    "class3_quality_score_max": 0.82,
+    "class1_document_score_min": 1.01,
+    "class1_crop_score_max": -0.01,
+    "class1_quality_score_min": 1.01
+  },
+  "routing_order": [
+    "class4_non_document",
+    "class2_cropped",
+    "class3_degraded",
+    "class1_clear",
+    "fallback"
+  ],
+  "tuning_summary": {
+    "direct_coverage": 1.0,
+    "fallback_rate": 0.0
+  },
+  "heldout_cv_summary": {
+    "direct_coverage": 0.996,
+    "fallback_rate": 0.0040000000000000036
+  }
+}

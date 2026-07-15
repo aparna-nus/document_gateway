@@ -1,0 +1,72 @@
+{
+  "created_at_utc": "2026-07-14T21:31:53.702150+00:00",
+  "evaluation": {
+    "total_images": 250,
+    "class_composition": {
+      "1": 76,
+      "2": 76,
+      "3": 76,
+      "4": 22
+    },
+    "accuracy": 0.5,
+    "macro_f1": 0.5201482108412392,
+    "per_class_metrics": {
+      "1": {
+        "class_name": "Clear and Readable",
+        "precision": 0.45217391304347826,
+        "recall": 0.6842105263157895,
+        "f1": 0.5445026178010471,
+        "support": 76
+      },
+      "2": {
+        "class_name": "Content Got Cut",
+        "precision": 0.5087719298245614,
+        "recall": 0.3815789473684211,
+        "f1": 0.43609022556390975,
+        "support": 76
+      },
+      "3": {
+        "class_name": "Unclear / Unreadable",
+        "precision": 0.515625,
+        "recall": 0.4342105263157895,
+        "f1": 0.4714285714285714,
+        "support": 76
+      },
+      "4": {
+        "class_name": "Random Image",
+        "precision": 0.8461538461538461,
+        "recall": 0.5,
+        "f1": 0.6285714285714286,
+        "support": 22
+      }
+    }
+  },
+  "routing": {
+    "cv_direct_count": 121,
+    "cv_direct_rate": 0.484,
+    "vlm_fallback_requested_count": 129,
+    "vlm_fallback_requested_rate": 0.516,
+    "vlm_determinate_count": 128,
+    "indeterminate_count": 1
+  },
+  "class4_safety": {
+    "precision": 0.8461538461538461,
+    "recall": 0.5,
+    "false_block_count": 2,
+    "strict_bypass_count": 11,
+    "unsafe_pass_count": 7,
+    "indeterminate_count": 1
+  },
+  "latency": {
+    "fallback_requests": 129,
+    "successful_calls": 128,
+    "mean_latency_seconds": 56.67367687693794,
+    "median_latency_seconds": 49.04622345800453,
+    "p95_latency_seconds": 93.92846437540136,
+    "total_vlm_runtime_minutes": 121.84840528541658
+  },
+  "artifacts": {
+    "final_results_csv": "artifacts/final_pipeline_evaluation_results.csv",
+    "vlm_predictions_jsonl": "artifacts/vlm_final_evaluation_predictions.jsonl"
+  }
+}
