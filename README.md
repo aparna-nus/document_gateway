@@ -222,6 +222,15 @@ The dataset contains four routing classes:
 | **tuning** | 51 | 51 | 51 | 14 | **167** |
 | **All data** | **127** | **127** | **127** | **36** | **417** |
 
+### Evaluation Routing Summary
+
+| Stage | Images | Percentage |
+|--------|-------:|-----------:|
+| Total evaluation images | 250 | 100.0% |
+| Resolved by CV layer | 121 | 48.4% |
+| Escalated to Qwen2.5-VL | 129 | 51.6% |
+| Final PASS decisions | 113 | 45.2% |
+| Non-PASS decisions | 137 | 54.8% |
 
 ---
 
