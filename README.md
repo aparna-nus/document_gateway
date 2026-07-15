@@ -100,7 +100,6 @@ document_gateway/
                                             BLOCK
                                             MANUAL REVIEW
                     ```
-
 ---
 
 # Installation
@@ -114,6 +113,16 @@ pip install -r requirements.txt
 ```
 
 ---
+
+The lightweight CV layer estimates three independent properties of the uploaded image before any Vision Language Model inference.
+
+| Score | Purpose | Representative Features |
+|--------|---------|-------------------------|
+| Document Score | Estimates whether the image primarily contains a document | Whitespace ratio, colour saturation, foreground/background separation |
+| Crop Score | Estimates whether document content extends beyond the image boundary | Connected components touching borders, boundary ink density, projection discontinuities |
+| Quality Score | Estimates OCR readability | Local sharpness, gradient energy, frequency response, dynamic range, exposure statistics |
+
+These feature groups are combined into three normalized composite scores. Thresholds learned on the tuning dataset determine whether an image can be confidently routed by the CV layer or should be escalated to the Vision Language Model.
 
 # Running the Pipeline
 
