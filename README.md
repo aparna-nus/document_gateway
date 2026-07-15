@@ -3,6 +3,13 @@
 
 Lightweight OpenCV routing combined with a Vision Language Model (Qwen2.5-VL via Ollama) to determine whether uploaded images are safe to send to OCR.
 
+Design Principles Followed:
+
+• Prioritise lightweight CV inference whenever confidence is sufficient.
+• Escalate only ambiguous cases to the Vision Language Model.
+• Treat unsafe OCR acceptance as a higher-cost error than conservative routing.
+• Produce deterministic operational actions rather than raw class predictions.
+
 ---
 
 ## Table of Contents
@@ -15,8 +22,6 @@ Lightweight OpenCV routing combined with a Vision Language Model (Qwen2.5-VL via
 - [Dataset Construction](#dataset-construction)
 - [Evaluation](#evaluation)
     - [Dataset Statistics](#dataset-statistics)
-    - [Computer Vision Layer](#computer-vision-layer)
-    - [Vision Language Model Layer](#vision-language-model-layer)
     - [End-to-End Pipeline](#end-to-end-pipeline)
 - [Failure Analysis](#failure-analysis)
 - [Key Takeaways](#key-takeaways)
@@ -48,9 +53,8 @@ document_gateway/
 │
 ├── src/
 │   ├── document_gateway.py 
-│   ├── cv_router.py
-│   ├── vlm_classifier.py
-│   └── config.py
+│   ├── cv_features.py
+│   └── gateway_config.py
 │
 ├── notebooks/
 │
