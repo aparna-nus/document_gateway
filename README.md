@@ -37,12 +37,10 @@ This repository contains:
 |------|-------------|
 | `README.md` | Project documentation |
 | **`final_validation_log.md`** | **All metric logged as per rubric**|
-| `src/document_gateway.py` | Complete inference pipeline |
-| `src/cv_router.py` | CV scoring + routing |
-| `src/vlm_classifier.py` | VLM fallback |
-| `src/config.py` | Locked thresholds |
+| `src/document_gateway.py` | Complete inference pipeline as script |
 | `eval/` | Evaluation dataset |
 | `artifacts/` | Evaluation outputs |
+| `notebooks/` | To review experimental flow |
 
 ---
 
